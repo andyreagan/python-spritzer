@@ -1,0 +1,4 @@
+cd /usr/share/nginx/streaming
+. pyenv/bin/activate
+python happiness_quick.py
+python zipper.py

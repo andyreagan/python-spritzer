@@ -1,0 +1,21 @@
+#!/bin/bash
+
+cd /usr/share/nginx/streaming
+# full path
+PIDFILE="/usr/share/nginx/streaming/daemon.pid"
+
+echo $(date) >> watchdog.log
+
+if [ -e "${PIDFILE}" ] && (ps -u $(whoami) -opid= |
+                           grep -P "^\s*$(cat ${PIDFILE})$" &> /dev/null); then
+  echo "Already running." >> watchdog.log
+  exit 99
+fi
+
+echo "Not running, will restart." >> watchdog.log
+
+. pyenv/bin/activate
+# python multiprocessing_daemon.py &
+python twython_test.py &
+echo $! > daemon.pid
+chmod 644 daemon.pid
